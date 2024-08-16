@@ -13,15 +13,18 @@ import java.util.stream.Collectors;
 
 public class Principal {
     
-    private Scanner leitura = new Scanner(System.in);
-    private ConsumoApi consumo = new ConsumoApi();
-    private ConverteDados conversor = new ConverteDados();
-    private final String ENDERECO = "https://www.omdbapi.com/?t=";
-    private final String API_KEY = "&apikey=75cc07dd";
+    // Lista de Series
     private List<DadosSerie> dadosSeries = new ArrayList<>();
     private List<Serie> series = new ArrayList<>();
     
     private SerieRepository repositorio;
+    
+    private Scanner leitura = new Scanner(System.in);
+    private ConsumoApi consumo = new ConsumoApi();
+    private ConverteDados conversor = new ConverteDados();
+    
+    private final String ENDERECO = "https://www.omdbapi.com/?t=";
+    private final String API_KEY = "&apikey=75cc07dd";
     
     public Principal(SerieRepository repositorio) {
         this.repositorio = repositorio;
@@ -31,7 +34,7 @@ public class Principal {
         var opcao = -1;
         while (opcao != 0) {
             var menu = """
-                    1 - Buscar séries
+                    \n1 - Buscar séries
                     2 - Buscar episódios
                     3 - Listar séries buscadas
                                         
@@ -50,7 +53,7 @@ public class Principal {
                 buscarEpisodioPorSerie();
                 break;
             case 3:
-                listarSeriesBuscadas();
+                listarSeriesBuscadasV2();
                 break;
             case 0:
                 System.out.println("Saindo...");
@@ -101,14 +104,29 @@ public class Principal {
         temporadas.forEach(System.out::println);
     }
     
+    /**
+     *
+     * @deprecated Use {@link #listarSeriesBuscadasV2()} em vez dela.
+     */
+    @Deprecated
     private void listarSeriesBuscadas() {
-//        // Parte desnecessária pois objeto já foi convertido na criação
-//        List<Serie> series = new ArrayList<>();
-//
-//        // Transformar DadosSerie em Serie
-//        dadosSeries.stream()
-//                .map(d -> new Serie(d))
-//                .collect(Collectors.toList());
+        // Parte desnecessária pois objeto já foi convertido na criação
+        List<Serie> series = new ArrayList<>();
+
+        // Transformar DadosSerie em Serie
+        dadosSeries.stream()
+                .map(d -> new Serie(d))
+                .collect(Collectors.toList());
+
+        // Ordenar as series por genero e imprimir
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
+    }
+    
+    private void listarSeriesBuscadasV2() {
+        // Busca todas as séries no banco
+        series = repositorio.findAll();
         
         // Ordenar as series por genero e imprimir
         series.stream()

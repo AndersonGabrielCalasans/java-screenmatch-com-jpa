@@ -37,6 +37,9 @@ public class Serie {
     @Transient // Não reflete no banco de dados
     private List<Episodio> episodios = new ArrayList<>();
     
+    // Construtor padrão para JPA
+    public Serie() { }
+    
     public Serie(DadosSerie dadosSerie) {
         this.titulo = dadosSerie.titulo();
         this.totalTemporadas = dadosSerie.totalTemporadas();

@@ -8,9 +8,9 @@ import com.theokanning.openai.service.OpenAiService;
  */
 public class ConsultaChatGPT {
     
-    // TO-DO: precisa gerar o token da API para funcionar
+    // TO-DO: precisa gerar o token da API e colocar nas variaveis de ambiente para funcionar
     public static String obterTraducao(String texto) {
-        OpenAiService servico = new OpenAiService("");
+        OpenAiService servico = new OpenAiService(System.getenv("OPENAI_APIKEY"));
         
         CompletionRequest requisicao = CompletionRequest.builder()
                 .model("gpt-3.5-turbo-instruct")
