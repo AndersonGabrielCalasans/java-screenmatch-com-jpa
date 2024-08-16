@@ -4,6 +4,7 @@ import br.com.alura.screenmatch.model.DadosSerie;
 import br.com.alura.screenmatch.model.DadosTemporada;
 import br.com.alura.screenmatch.model.Episodio;
 import br.com.alura.screenmatch.model.Serie;
+import br.com.alura.screenmatch.repository.SerieRepository;
 import br.com.alura.screenmatch.service.ConsumoApi;
 import br.com.alura.screenmatch.service.ConverteDados;
 
@@ -19,6 +20,12 @@ public class Principal {
     private final String API_KEY = "&apikey=75cc07dd";
     private List<DadosSerie> dadosSeries = new ArrayList<>();
     private List<Serie> series = new ArrayList<>();
+    
+    private SerieRepository repositorio;
+    
+    public Principal(SerieRepository repositorio) {
+        this.repositorio = repositorio;
+    }
     
     public void exibeMenu() {
         var opcao = -1;
