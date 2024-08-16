@@ -1,8 +1,7 @@
 package br.com.alura.screenmatch.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import br.com.alura.screenmatch.service.ConsultaChatGPT;
 
-import java.util.Optional;
 import java.util.OptionalDouble;
 
 public class Serie {
@@ -22,7 +21,7 @@ public class Serie {
         this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim()); //Retorna só o primeiro item da string
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();
-        this.sinopse = dadosSerie.sinopse();
+        this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse().trim());  // Obtem a tradução da sinopse
     }
     
     public String getTitulo() {

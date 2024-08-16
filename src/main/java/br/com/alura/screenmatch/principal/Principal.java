@@ -18,6 +18,7 @@ public class Principal {
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=75cc07dd";
     private List<DadosSerie> dadosSeries = new ArrayList<>();
+    private List<Serie> series = new ArrayList<>();
     
     public void exibeMenu() {
         var opcao = -1;
@@ -52,18 +53,33 @@ public class Principal {
         }
     }
     
+//    private void buscarSerieWeb() {
+//        DadosSerie dados = getDadosSerie();
+//        dadosSeries.add(dados);
+//        System.out.println(dados);
+//    }
+
     private void buscarSerieWeb() {
-        DadosSerie dados = getDadosSerie();
-        dadosSeries.add(dados);
-        System.out.println(dados);
+        Serie serie = getSerie();
+        series.add(serie);
+        System.out.println(series);
     }
-    
+
     private DadosSerie getDadosSerie() {
         System.out.println("Digite o nome da série para busca");
         var nomeSerie = leitura.nextLine();
         var json = consumo.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
         DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
         return dados;
+    }
+    
+    private Serie getSerie() {
+        System.out.println("Digite o nome da série para busca");
+        var nomeSerie = leitura.nextLine();
+        var json = consumo.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
+        DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
+        Serie serie = new Serie(dados);
+        return serie;
     }
     
     private void buscarEpisodioPorSerie() {
@@ -79,12 +95,13 @@ public class Principal {
     }
     
     private void listarSeriesBuscadas() {
-        List<Serie> series = new ArrayList<>();
-        
-        // Transformar DadosSerie em Serie
-        dadosSeries.stream()
-                .map(d -> new Serie(d))
-                .collect(Collectors.toList());
+//        // Parte desnecessária pois objeto já foi convertido na criação
+//        List<Serie> series = new ArrayList<>();
+//
+//        // Transformar DadosSerie em Serie
+//        dadosSeries.stream()
+//                .map(d -> new Serie(d))
+//                .collect(Collectors.toList());
         
         // Ordenar as series por genero e imprimir
         series.stream()
