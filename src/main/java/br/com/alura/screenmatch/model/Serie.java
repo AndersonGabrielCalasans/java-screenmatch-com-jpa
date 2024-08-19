@@ -34,7 +34,7 @@ public class Serie {
     
     private String sinopse;
     
-    @Transient // Não reflete no banco de dados
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episodio> episodios = new ArrayList<>();
     
     // Construtor padrão para JPA
@@ -119,6 +119,7 @@ public class Serie {
     }
     
     public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(e -> e.setSerie(this));
         this.episodios = episodios;
     }
     
@@ -130,6 +131,7 @@ public class Serie {
                 ", poster='" + poster + '\'' +
                 ", genero=" + genero +
                 ", atores='" + atores + '\'' +
-                ", sinopse='" + sinopse + '\'';
+                ", sinopse='" + sinopse + '\'' +
+                ", episódios='" + episodios + '\'';
     }
 }
