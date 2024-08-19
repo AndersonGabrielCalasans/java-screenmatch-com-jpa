@@ -1,5 +1,6 @@
 package br.com.alura.screenmatch.repository;
 
+import br.com.alura.screenmatch.model.Categoria;
 import br.com.alura.screenmatch.model.Serie;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,4 +18,9 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
     
     // Retorna as 5 melhores series de forma decrescente
     List<Serie> findTop5ByOrderByAvaliacaoDesc();
+    
+    // Busca séries pela categoria
+    List<Serie> findByCategoria(Categoria categoria);
+    
+    List<Serie> findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(Integer numeroDeTemporadas, Double avaliacao);
 }
