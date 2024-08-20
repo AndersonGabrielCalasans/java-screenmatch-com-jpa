@@ -1,26 +1,32 @@
 package br.com.alura.screenmatch.repository;
 
 import br.com.alura.screenmatch.model.Categoria;
+import br.com.alura.screenmatch.model.Episodio;
 import br.com.alura.screenmatch.model.Serie;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 
-// TO-DO: Derived-Query para criar metodos com base em padroes de SQL (JPA Query Methods)
 public interface SerieRepository extends JpaRepository<Serie, Long> {
-    
-    // Encontra uma serie pelo titulo ignorando cases sensitive
     Optional<Serie> findByTituloContainingIgnoreCase(String nomeSerie);
     
-    // Consulta por atores em que a avaliação é maior ou igual à algum valor
-    List<Serie> findByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(String nomeAtor, Double avaliacao);
+    List<Serie> findByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(String nomeAtor, double avaliacao);
     
-    // Retorna as 5 melhores series de forma decrescente
     List<Serie> findTop5ByOrderByAvaliacaoDesc();
     
-    // Busca séries pela categoria
-    List<Serie> findByCategoria(Categoria categoria);
+    List<Serie> findByGenero(Categoria categoria);
     
-    List<Serie> findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(Integer numeroDeTemporadas, Double avaliacao);
+    List<Serie> findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(int totalTemporadas, double avaliacao);
+    @Query("select s from Serie s WHERE s.totalTemporadas <= :totalTemporadas AND s.avaliacao >= :avaliacao")
+    List<Serie> seriesPorTemporadaEAValiacao(int totalTemporadas, double avaliacao);
+    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE e.titulo ILIKE %:trechoEpisodio%")
+    List<Episodio> episodiosPorTrecho(String trechoEpisodio);
+    
+    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie ORDER BY e.avaliacao DESC LIMIT 5")
+    List<Episodio> topEpisodiosPorSerie(Serie serie);
+    
+    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie AND YEAR(e.dataLancamento) >= :anoLancamento")
+    List<Episodio> episodiosPorSerieEAno(Serie serie, int anoLancamento);
 }
